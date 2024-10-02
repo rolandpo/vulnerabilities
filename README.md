@@ -22,3 +22,29 @@ Typecasting a larger value to a smaller uint data type can cause overflows witho
 
 tx.origin should never be used for access control since users can be manipulated into calling the fallback function of a malicious contract. msg.sender should be used instead.
 
+# Outdated compiler version
+
+Bugs can exist due to an outdated Solidity compiler version.
+
+# Floating pragma
+
+A specific Solidity version should be chosen, to minimise the risks of deploying through a problematic version introducing unexpected bugs.
+
+# Unsafe low-level call
+
+Low-level calls return false instead of throwing an exception, while failed contract calls throw. Therefore, the return value of low-level calls should be checked to prevent unexpected behaviour.
+
+Since a call to a non-existant contract is always considered successful by the EVM, Solidity uses the extcodesize opcode to check if the contract exists. Since low-levels calls operate on addresses rather than contract istances, this check is skipped, so verifying the existence of the contract is important to prevent unexpected behaviour.
+
+# Unchecked return value
+
+External calls can be made using .send(), .call() or .transfer(). The .send() and .call() function return a boolean and do not revert on a failure, while .transfer() does.
+
+# DoS with revert
+
+DoS attacks can occur when a function tries sending funds to an address but a fallback function reverts all payments. A function could implement iterating over multiple addresses to be paid, but one malicious address could cause all payments to revert. Other DoS attacks can be caused by overflows/underflows, funds directly send to the contract without being recorded by internal accounting or division by 0.
+
+# Unsupported opcodes
+
+Opcode support can vary across EVM-compatible chains, which can lead to bugs if these differences are not accounted for.
+
