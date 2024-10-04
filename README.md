@@ -48,3 +48,29 @@ DoS attacks can occur when a function tries sending funds to an address but a fa
 
 Opcode support can vary across EVM-compatible chains, which can lead to bugs if these differences are not accounted for.
 
+# Assert violation
+
+A failing assert() function steals gas, as opposed to require() and revert(), and should only be used for checking invariants.
+
+# Deprecated functions
+
+Deprecated functions can lead to unexpected behaviour and compilation errors.
+
+# DelegateCall to untrusted callee
+
+Delegatecall is a low-level function that executes code of target contract with the storage, msg.sender and msg.value of the calling contract. Checks should be in place to make sure the target contract is not user-defined.
+
+# Signature malleability
+
+Due to the eliptic curve being symmetric about the x-axis, each valid signature has a complementary signature, possible to be calculated without knowing the private key from which it is derived. This means that checking for whether a signature has been used is not sufficient in protecting against malicious activity. If the signature is part of a signed message hash, previously signed messages could be replayed.
+
+# Other
+
+ERC3156 flash loan
+
+
+# Checklist
+
+- Vault assets/shares conflation
+- no recipient address validation on public claim functions
+- checks at start of function that should be valid at the end
