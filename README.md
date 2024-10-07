@@ -64,6 +64,20 @@ Delegatecall is a low-level function that executes code of target contract with 
 
 Due to the eliptic curve being symmetric about the x-axis, each valid signature has a complementary signature, possible to be calculated without knowing the private key from which it is derived. This means that checking for whether a signature has been used is not sufficient in protecting against malicious activity. If the signature is part of a signed message hash, previously signed messages could be replayed.
 
+# Shadowing state variables
+
+Variables of the same name can have diffrent values across multiple contracts, which can lead to unintended behaviour if one contract inherits from another with the inherited variable value overriden.
+
+# Weak randomness
+
+Pseudorandom variables, such as block.timestamp, blockhash and block.prevrandao are not reliable for generating randomness since the blockchain is entirely deterministic. Randomness should be generated using oracle solutions, such as Chainlink VRF.
+
+# Signature replay attacks
+
+To protect against signature replay attacks, only new hashes should be processed. Every processed message hash should be stored and compared to new one. The address of the contract should be included in the message hash to avoid the message being used in other contracts. The message hash should never be generated using the signature because of signature malleability.
+
+
+
 # Other
 
 ERC3156 flash loan
