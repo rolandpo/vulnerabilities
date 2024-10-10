@@ -76,11 +76,28 @@ Pseudorandom variables, such as block.timestamp, blockhash and block.prevrandao 
 
 To protect against signature replay attacks, only new hashes should be processed. Every processed message hash should be stored and compared to new one. The address of the contract should be included in the message hash to avoid the message being used in other contracts. The message hash should never be generated using the signature because of signature malleability.
 
+# Writing to arbitrary storage locations
+
+Authorization checks should be in place to prevent overwriting sensitive data.
+
+# Hash collision with abi.encodePacked()
+
+When multiple variable-length arguments are used in abi.encodePacked(), two different calls can produce the same output since the function doesn't differentiate between multiple arguments and multiple elements of an array or string. This can lead to potential vulnerabilities, such as exploiting signature verification. Avoiding using variable-length arguments in abi.encodePacked() or using abi.encode() can mitigate the issue.
+
+# Incorrect inheritance order
+
+When a contracts inherits from multiple contracts, the compiler linearises the inheritance from left to right. If multiple inherited contracts implement or override the same function signature, the right-most contract is prioritised for calling that function.
+
+# Unencrypted private data
+
+Contract code and storage is always public and can be read. Variables marked as private are only inaccessible to other contracts. Commit-reveal schemes and zero-knowledge proofs can be used to protect sensitive data.
+
 
 
 # Other
 
 ERC3156 flash loan
+USDC blacklist
 
 
 # Checklist
