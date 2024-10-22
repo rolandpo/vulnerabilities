@@ -92,7 +92,25 @@ When a contracts inherits from multiple contracts, the compiler linearises the i
 
 Contract code and storage is always public and can be read. Variables marked as private are only inaccessible to other contracts. Commit-reveal schemes and zero-knowledge proofs can be used to protect sensitive data.
 
+# Inadherance to standards
 
+Contract that do not adhere to standards can lead to unexpected behaviour and integration issues.
+
+# Asserting contract from code size
+
+Checking code size is not enough to differentiate between a contract and an EOA. A contract can use the CREATE opcode to execute an arbitrary payload and call another contract, making the codesize of msg.sender 0. Therefore, non-zero codesize always indicates a contract, but codesize being 0 is not necessarily an EOA.
+
+# Transaction-ordering dependence
+
+Before transactions are grouped together in blocks, they are placed in a public mempool, from which block builders can group them as is economically optimal. Therefore, profitable transactions can be scanned and front-ran by replacing them with similar ones with a higher gas price. Ways to prevent this include using a commit-reveal scheme or a private mempool such as Flashbots.
+
+# DoS with block gas limit
+
+The block gas limit prevents attackers from creating an infinite transaction loop. When executing logic in an unbounded loop, for example transferring funds to an array of users, the block gas limit can be reached, potentially preventing the function from ever being executed. This can be preventing by using a push-pull payment system or by allowing the action to take place over multiple blocks. Transactions that do not loop through an array of unspecified length can also be attacked with a block gas limit if the attacker uses block stuffing, issueing multiple transactions at a high gas price, to prevent the transaction from being included in a block.
+
+# Dos with revert
+
+Some transactions can be unexpectedly reverted if they rely on sending funds to a user-defined contract, which could have no fallback function implemented. This can be fixed using a push-pull payment system. Other ways of reverting transactions could included underflows/overflows, overrelying on internal accounting or division by zero.
 
 # Other
 
