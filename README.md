@@ -112,10 +112,26 @@ The block gas limit prevents attackers from creating an infinite transaction loo
 
 Some transactions can be unexpectedly reverted if they rely on sending funds to a user-defined contract, which could have no fallback function implemented. This can be fixed using a push-pull payment system. Other ways of reverting transactions could included underflows/overflows, overrelying on internal accounting or division by zero.
 
+# Unexpected ecrecover null address
+
+It is possible have ecrecover deterministically return zero from signature parameters, r, s and v by setting v to any positive number other than 27 and 28. An issue could arise if a function tries to recover the signer from signature parameters to compare it to an owner variable. If the contract is renounced and the owner is set to a null address, this might override the access-controlled function if specific signature parameters are passed as input. Reverting is the signer address is zero can mitigate this issue.
+
+# Insufficient access control
+
+Functions that are meant to be restricted to specific callers need appropriate access control.
+
+# Off-by-one
+
+Off-by-one errors are when intended boundaries are incorrect by one, such as for loops where the last element is not iterated over over due to a bad array length check or in situations where the wrong comparison operator is used.
+
+
+
 # Other
 
 ERC3156 flash loan
 USDC blacklist
+Signature can be replayed across chains if ```chainId``` is not validated
+Signature replay by frontrunning transaction with valid data
 
 
 # Checklist
