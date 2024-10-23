@@ -124,6 +124,10 @@ Functions that are meant to be restricted to specific callers need appropriate a
 
 Off-by-one errors are when intended boundaries are incorrect by one, such as for loops where the last element is not iterated over over due to a bad array length check or in situations where the wrong comparison operator is used.
 
+# Lack of precision
+
+The resulting values of integer calculations are always rounded down. Since division often leaves a remainder, this introduces a lack of precision. In general, numerators should be sufficiently larger than denominators. Raising integers to a sufficient number of decimals, such as 1e18, can minimise loss of precision.
+
 
 
 # Other
